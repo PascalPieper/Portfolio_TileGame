@@ -14,7 +14,8 @@ namespace TileGame.Character
         public delegate void DeathHandler();
 
         private int _health = 100;
-
+        
+        public bool EquipBetterItemOnPickup = false;
         public Player(ItemInventory itemInventory) : base(itemInventory)
         {
             Sprite = new Sprite();
@@ -111,7 +112,11 @@ namespace TileGame.Character
             ImGui.Text("Strength: " + Strength);
             ImGui.Text("Current Weight: " + Math.Round(CurrentWeight, 2));
             ImGui.Text("Max Weight: " + MaxWeight);
-
+            ImGui.End();
+            
+            
+            ImGui.Begin("Level Options");
+            ImGui.Checkbox("Equip Higher Strength Item On Pickup", ref EquipBetterItemOnPickup);
             ImGui.End();
         }
 

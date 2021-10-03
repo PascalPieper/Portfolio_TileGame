@@ -10,7 +10,7 @@ using TileGame.Pathfinding;
 using TileGame.Tiles;
 using TileGame.Utility.Random;
 
-namespace TileGame.Level
+namespace TileGame.Storage
 {
     public class Level : ITick, IUpdate
     {
@@ -92,6 +92,7 @@ namespace TileGame.Level
                             AutoPathFinding = true;
                             AutoTraverse = !AutoTraverse;
                         }
+
                     }
 
                     ImGui.End();
@@ -208,6 +209,15 @@ namespace TileGame.Level
                     player.ItemInventory.Items.Count < player.ItemInventory.MaxSlots)
                 {
                     player.ItemInventory.AddItemToFront(tile.TreasureChest.Open());
+                    if (player.EquipBetterItemOnPickup)
+                    {
+                        for (int i = 0; i < player.ItemInventory.Items.Count; i++)
+                        {
+                            player.ItemInventory.ReplaceItemByType(i);
+                        }
+                        
+                    }
+
                     player.Validate();
                 }
         }

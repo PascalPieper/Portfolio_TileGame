@@ -4,10 +4,11 @@ using SFML.System;
 using TileGame.Character;
 using TileGame.Game;
 using TileGame.Items;
+using TileGame.Pathfinding;
 using TileGame.Tiles;
 using TileGame.Utility.Random;
 
-namespace TileGame.Level
+namespace TileGame.Storage
 {
     public class LevelGenerator
     {
@@ -66,6 +67,47 @@ namespace TileGame.Level
             });
 
             return level;
+        }
+
+        private void FillLevel(LevelTemplate template, Level level, string fillTile)
+        {
+            for (var i = 0; i < template.MapSize.X; i++)
+            {
+                for (var j = 0; j < template.MapSize.Y; j++)
+                {
+                    level.TileMatrix[i, j] = CreateTile(fillTile, i, j);
+                }
+            }
+        }
+
+        private List<Vector2i> GeneratePathPoints(int pointAmount, LevelTemplate template)
+        {
+            var pointList = new List<Vector2i>();
+            for (int i = 0; i < pointAmount; i++)
+            {
+                var pointX = RandomGenerator.RandomNumber(2, template.MapSize.X - 2);
+                var pointY = RandomGenerator.RandomNumber(2, template.MapSize.Y - 2);
+                var result = new Vector2i(pointX, pointY);
+                pointList.Add(result);
+            }
+
+            return pointList;
+        }
+
+        private void CreatePath(List<Vector2i> pathPoints, Level level)
+        {
+            var pathfinder = new Pathfinding.Pathfinding(level.TileMatrix);
+            var points = new List<List<Node>>();
+            var spawnpos = level.SpawnTile.Node.MatrixPosition;
+            pathfinder.FindPath(spawnpos, pathPoints[0]);
+
+
+            points.Add(pathfinder.Path);
+
+            for (int i = 1; i < pathPoints.Count; i++)
+            {
+                
+            }
         }
 
         private Tile CreateTile(string tileName, int xPos, int yPos)

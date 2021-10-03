@@ -1,10 +1,11 @@
-﻿using ImGuiNET;
+﻿using System;
+using ImGuiNET;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using TileGame.Game;
 using TileGame.Items;
-using TileGame.Level;
+using TileGame.Storage;
 using TileGame.Tiles;
 using GuiImpl = TileGame.Utility.SfmlExtension.GuiImpl;
 
@@ -17,7 +18,7 @@ namespace TileGame.Main
         private int _mapsizeX = 32;
         private int _mapsizeY = 32;
         private float _itemSpawnFrequency = 0.025f;
-        private Level.Level _activeLevel;
+        private Storage.Level _activeLevel;
         private Time _deltaTime;
         private readonly Clock _deltaTimeClock;
 
@@ -35,6 +36,7 @@ namespace TileGame.Main
             _activeview = view1;
             //view1.Zoom(2);
             var window = new RenderWindow(mode, "TileGame Portfolio");
+            window.Closed += new EventHandler(Window_close_event);
             window.SetFramerateLimit(60);
             window.SetKeyRepeatEnabled(true);
 
@@ -54,7 +56,8 @@ namespace TileGame.Main
                 GuiImpl.Update(window, _deltaTime);
 
                 #region ImGui Interface
-
+                
+                
                 if (ImGui.Begin("Level Selection"))
                 {
                     if (ImGui.SliderInt("Spawn Speed", ref _generationSpeed, 1, 35))
@@ -227,6 +230,12 @@ namespace TileGame.Main
             }
         }
 
+        private void Window_close_event(object sender, EventArgs e)
+        {
+            var window = (Window)sender;
+            window.Close();
+        }
+
         private void Window_KeyPressed(object sender, KeyEventArgs e)
         {
             var window = (Window)sender;
@@ -269,7 +278,7 @@ namespace TileGame.Main
             }
         }
 
-        private void UnloadLevel(GameManager gm, ref Level.Level activeLevel)
+        private void UnloadLevel(GameManager gm, ref Storage.Level activeLevel)
         {
             gm?.UnloadAllGameObjects();
             activeLevel?.DestroyAllTiles();

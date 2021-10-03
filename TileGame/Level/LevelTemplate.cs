@@ -2,7 +2,7 @@
 using TileGame.Items;
 using TileGame.Tiles;
 
-namespace TileGame.Level
+namespace TileGame.Storage
 {
     public class LevelTemplate
     {

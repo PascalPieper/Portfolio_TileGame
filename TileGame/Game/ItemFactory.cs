@@ -24,8 +24,8 @@ namespace TileGame.Game
                 var item = GetInstance(itemIdentifier);
 
                 item.Price = RandomGenerator.RandomNumber(0, 255);
-                item.Weight = RandomGenerator.RandomNumber(0.1f, 5);
-                item.StrengthBonus = RandomGenerator.RandomNumber(1, 5);
+                item.Weight = RandomGenerator.RandomNumber(0.1f, 12);
+                item.StrengthBonus = RandomGenerator.RandomNumber(1, 8);
                 return item;
             }
             catch (Exception e)

@@ -2,7 +2,7 @@
 using SFML.Graphics;
 using SFML.System;
 using TileGame.Interfaces;
-using TileGame.Level;
+using TileGame.Storage;
 using TileGame.Pathfinding;
 using TileGame.Tiles.Behavior;
 

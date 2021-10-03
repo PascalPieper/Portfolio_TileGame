@@ -4,7 +4,7 @@ using TileGame.Character;
 using TileGame.Game;
 using TileGame.Items;
 
-namespace TileGame.Level
+namespace TileGame.Storage
 {
     public class TreasureChest : IOccupy
     {
@@ -23,6 +23,11 @@ namespace TileGame.Level
         public void GiveItem(Player player)
         {
             player.ItemInventory.AddItemToFront(HoldItem);
+            if (player.EquipBetterItemOnPickup)
+            {
+                player.ItemInventory.Items[0].Equip();
+            }
+                
         }
 
 

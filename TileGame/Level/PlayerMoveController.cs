@@ -1,6 +1,6 @@
 ﻿using TileGame.Character;
 
-namespace TileGame.Level
+namespace TileGame.Storage
 {
     public class PlayerMoveController
     {

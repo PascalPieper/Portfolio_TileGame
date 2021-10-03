@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TileGame.Game;
 
-namespace TileGame.Level
+namespace TileGame.Storage
 {
     public class Inventory<T>
     {

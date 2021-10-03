@@ -8,7 +8,7 @@ using TileGame.Items;
 
 namespace TileGame.Character
 {
-    public class ItemInventory : Level.Inventory<ItemBase>, IUpdate
+    public class ItemInventory : Storage.Inventory<ItemBase>, IUpdate
     {
         public delegate void OnItemChanged();
 
@@ -67,30 +67,7 @@ namespace TileGame.Character
                 var nameNumber = i + 1;
                 if (ImGui.Button("Equip Item " + nameNumber))
                 {
-                    switch (Items[i])
-                    {
-                        case Ring when RingSlot == null:
-                            RingSlot = Items[i];
-                            Items.Remove(Items[i]);
-                            ItemChangeEvent?.Invoke();
-                            break;
-                        
-                        case Weapon when WeaponSlot == null:
-                            WeaponSlot = Items[i];
-                            Items.Remove(Items[i]);
-                            ItemChangeEvent?.Invoke();
-                            break;
-                        
-                        case Armor when ArmorSlot == null:
-                            ArmorSlot = Items[i];
-                            Items.Remove(Items[i]);
-                            ItemChangeEvent?.Invoke();
-                            break;
-                        
-                        default:
-                            Notifier.SetMessage("You already have an item of type " + Items[i].Name + " equipped.");
-                            break;
-                    }
+                    EquiptItemByType(i);
                 }
 
 
@@ -107,6 +84,87 @@ namespace TileGame.Character
             ImGui.End();
         }
 
+        public void EquiptItemByType(int i)
+        {
+            switch (Items[i])
+            {
+                case Ring when RingSlot == null:
+                    RingSlot = Items[i];
+                    Items.Remove(Items[i]);
+                    ItemChangeEvent?.Invoke();
+                    break;
+
+                case Weapon when WeaponSlot == null:
+                    WeaponSlot = Items[i];
+                    Items.Remove(Items[i]);
+                    ItemChangeEvent?.Invoke();
+                    break;
+
+                case Armor when ArmorSlot == null:
+                    ArmorSlot = Items[i];
+                    Items.Remove(Items[i]);
+                    ItemChangeEvent?.Invoke();
+                    break;
+
+                default:
+                    Notifier.SetMessage("You already have an item of type " + Items[i].Name + " equipped.");
+                    break;
+            }
+        }
+
+        public void ReplaceItemByType(int i)
+        {
+            switch (Items[i])
+            {
+                case Ring:
+                    if (RingSlot == null)
+                    {
+                        EquiptItemByType(i);
+                        return;
+                    }
+                    if (Items[i].StrengthBonus > RingSlot.StrengthBonus)
+                    {
+                        RingSlot = null;
+                        RingSlot = Items[i];
+                        Items.Remove(Items[i]);
+                        ItemChangeEvent?.Invoke();
+                    }
+                    break;
+
+                case Weapon:
+                    if (WeaponSlot == null)
+                    {
+                        EquiptItemByType(i);
+                        return;
+                    }
+                    if (Items[i].StrengthBonus > WeaponSlot.StrengthBonus)
+                    {
+                        WeaponSlot = null;
+                        WeaponSlot = Items[i];
+                        Items.Remove(Items[i]);
+                        ItemChangeEvent?.Invoke();
+                    }
+                    break;
+
+                case Armor:
+                    if (ArmorSlot == null)
+                    {
+                        EquiptItemByType(i);
+                        return;
+                    }
+                    if (Items[i].StrengthBonus > ArmorSlot.StrengthBonus)
+                    ArmorSlot = null;
+                    ArmorSlot = Items[i];
+                    Items.Remove(Items[i]);
+                    ItemChangeEvent?.Invoke();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        
         public event OnItemChanged ItemChangeEvent;
 
         private List<ItemBase> SortByWeight()
